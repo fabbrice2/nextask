@@ -12,13 +12,10 @@ const app = express();
 const PORT = 3001;
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-
-// Configuration de la base de données
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -26,7 +23,6 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-// Connexion à la base de données
 db.query("SELECT 1", (err, results) => {
   if (err) {
     console.error(
@@ -56,11 +52,9 @@ app.post("/register", async (req, res) => {
           return res.status(400).json({ message: "Email déjà utilisé." });
         }
 
-        // Hachage du mot de passe
         const hashedPassword = await bcrypt.hash(password, 10);
         console.log("Mot de passe haché créé :", hashedPassword);
 
-        // Insertion de l'utilisateur
         db.query(
           "INSERT INTO users (email, password) VALUES (?, ?)",
           [email, hashedPassword],
@@ -86,7 +80,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// Middleware de vérification du token
 function authenticateToken(req, res, next) {
   const token = req.headers["authorization"];
   if (!token) return res.status(401).json({ message: "Accès refusé" });
@@ -103,7 +96,6 @@ app.post("/login", async (req, res) => {
   console.log("Tentative de connexion pour :", email);
 
   try {
-    // Vérifie si l'utilisateur existe dans la base de données
     db.query(
       "SELECT * FROM users WHERE email = ?",
       [email],
@@ -120,7 +112,6 @@ app.post("/login", async (req, res) => {
 
         const user = results[0];
 
-        // Vérifie le mot de passe
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
           return res
@@ -128,12 +119,10 @@ app.post("/login", async (req, res) => {
             .json({ message: "Email ou mot de passe incorrect." });
         }
 
-        // Crée un token JWT
         const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
           expiresIn: "1h",
         });
 
-        // Renvoie le token au client
         res.json({ token, email: user.email, message: "Connexion réussie !" });
       }
     );
@@ -143,7 +132,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// GET /tasks - Récupérer toutes les tâches
 app.get("/tasks", (req, res) => {
   db.query("SELECT * FROM posts", (err, results) => {
     if (err) {
@@ -154,7 +142,6 @@ app.get("/tasks", (req, res) => {
   });
 });
 
-// POST /tasks - Ajouter une nouvelle tâche
 app.post("/tasks", (req, res) => {
   const { title, body, user_id, status } = req.body;
   db.query(
@@ -172,10 +159,9 @@ app.post("/tasks", (req, res) => {
   );
 });
 
-// PUT /tasks/:id - Marquer une tâche comme complétée
 app.put("/tasks/:id", (req, res) => {
   const { id } = req.params;
-  const { status } = req.body; // Supposons que "status" peut être "completed" ou "pending"
+  const { status } = req.body;
   db.query(
     "UPDATE posts SET status = ? WHERE id = ?",
     [status, id],
@@ -191,7 +177,6 @@ app.put("/tasks/:id", (req, res) => {
   );
 });
 
-// DELETE /tasks/:id - Supprimer une tâche
 app.delete("/tasks/:id", (req, res) => {
   const { id } = req.params;
   db.query("DELETE FROM posts WHERE id = ?", [id], (err, result) => {
@@ -205,7 +190,6 @@ app.delete("/tasks/:id", (req, res) => {
   });
 });
 
-// Route protégée d'exemple
 app.get("/protected", authenticateToken, (req, res) => {
   res.json({
     message: "Vous avez accédé à une route protégée",
@@ -213,8 +197,6 @@ app.get("/protected", authenticateToken, (req, res) => {
   });
 });
 
-
-// Démarrer le serveur
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

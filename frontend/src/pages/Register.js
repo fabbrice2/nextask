@@ -12,7 +12,6 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Vérification des mots de passe
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -26,7 +25,7 @@ function Register() {
       });
 
       if (response.ok) {
-        navigate("/home"); // Redirection vers la page d'accueil après inscription
+        navigate("/home");
       } else {
         const data = await response.json();
         setError(data.message);
@@ -39,7 +38,7 @@ function Register() {
   return (
     <div className="bg-black h-screen text-white flex flex-col">
       <div className="h-1/12">
-      <Header title="Login" />
+        <Header title="Login" />
       </div>
       <div className="flex-grow h-full bg-black flex items-center justify-center mb-6">
         <div className="w-full max-w-md">
@@ -55,7 +54,9 @@ function Register() {
 
           <form onSubmit={handleRegister}>
             <div className="mb-6">
-              <label className="block text-sm font-medium mb-2">Email Address</label>
+              <label className="block text-sm font-medium mb-2">
+                Email Address
+              </label>
               <input
                 type="email"
                 value={email}
@@ -79,7 +80,9 @@ function Register() {
             </div>
 
             <div className="mb-8">
-              <label className="block text-sm font-medium mb-2">Confirm Password</label>
+              <label className="block text-sm font-medium mb-2">
+                Confirm Password
+              </label>
               <input
                 type="password"
                 value={confirmPassword}
@@ -100,7 +103,9 @@ function Register() {
         </div>
       </div>
       <div className="h-14 border-t border-[#ffffff36] flex items-center justify-center">
-        <p className="text-[#ffffff1a] text-sm">© 2024 NexTask. All rights reserved.</p>
+        <p className="text-[#ffffff1a] text-sm">
+          © 2024 NexTask. All rights reserved.
+        </p>
       </div>
     </div>
   );

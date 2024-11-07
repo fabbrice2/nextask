@@ -14,7 +14,7 @@ function Header({ title, email }) {
       </div>
       <div className="flex md:hidden cursor-pointer text-[#BBBAA6]">
         {title ? <p>{title}</p> : null}
-        {email ? <p>{email}</p> : null} {/* Affiche l'email si disponible */}
+        {email ? <p>{email}</p> : null} 
       </div>
     </div>
   );

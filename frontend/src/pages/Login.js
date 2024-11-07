@@ -17,10 +17,9 @@ function Login() {
         password,
       });
 
-      // Stocke le token JWT dans le localStorage
       localStorage.setItem("token", response.data.token);
       setMessage("Login successful!");
-      navigate("/home"); // Redirige vers la page d'accueil
+      navigate("/home");
     } catch (error) {
       setMessage("Login failed. Please check your credentials.");
     }
@@ -33,7 +32,6 @@ function Login() {
       </div>
       <div className="flex-grow h-full bg-black flex items-center justify-center">
         <div className="border border-gray-500 flex rounded-lg overflow-hidden">
-          {/* Section de connexion */}
           <div className="p-5 flex flex-col justify-between">
             <h1 className="text-lg font-semibold mb-6">Sign In</h1>
             <form onSubmit={handleLogin}>
@@ -79,7 +77,6 @@ function Login() {
             </form>
           </div>
 
-          {/* Section d'information sur la création d'un compte */}
           <div className="border-l border-gray-500 p-5 hidden flex-col justify-between md:flex">
             <h1 className="text-lg font-semibold mb-6">
               Why create an account?

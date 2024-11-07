@@ -7,7 +7,6 @@ function Loading() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Animation de fade-out
     gsap.fromTo(
       ".loading-page",
       { opacity: 1 },
@@ -17,7 +16,6 @@ function Loading() {
         duration: 1.5,
         delay: 3.5,
         onComplete: () => {
-          // Redirection vers la page de connexion après l'animation
           navigate("/login");
         },
       }
@@ -40,9 +38,7 @@ function Loading() {
 
   return (
     <div className="bg-red-400 h-screen text-white flex items-center justify-center">
-      <div className="container">
-        {/* Le composant Login n'est plus affiché ici, car on va rediriger */}
-      </div>
+      <div className="container"></div>
 
       <div className="loading-page">
         <svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
